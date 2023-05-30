@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>New WebXR Scene</title>
+    <script src='aframe.min.js'>
+    </script>
+	
+	<script>
+	AFRAME.registerComponent("acomponent", 
+	   { 
+	     init: function()
+	       {
+	        console.log("Component created and added!");
+	       }
+	   }
+	);
+	
+	
+	AFRAME.registerComponent("test", 
+	   { 
+	     init: function()
+	       {
+		   console.log("geia");
+	        this.el.addEventListener('keyPress', function() 
+			{
+			;
+			});
+
+	       }
+	   }
+	);
+	
+	
+	let userKeys = [];
+	let userPosition; // = document.getElementById('player').getAttribute('position');
+	
+      document.onkeydown = function(event) {
+	  
+		//console.log(event.keyCode);
+
+		if (event.keyCode == 37 || event.keyCode == 38 || event.keyCode == 39 || event.keyCode == 40 || event.keyCode == 65 || event.keyCode == 68 || event.keyCode == 83 || event.keyCode == 87) 
+		{
+			userMoved();
+		}
+	  
+       
+      };
+   
+	
+	function userMoved()
+	{
+		//console.log("Updated user position: " + document.getElementById('player').getAttribute('position') );
+		userPosition = document.getElementById('player').getAttribute('position');
+		checkObjectsToCollect();
+		//openTheDoor();
+	}
+	
+	function checkObjectsToCollect()
+	{
+		let collectibles = document.getElementsByClassName('keys');
+		//console.log(collectibles);
+		
+		for (let i = 0; i < collectibles.length; i++)
+		{
+			//console.log("Keys list: " + collectibles[i].getAttribute('id'));
+			if (Math.abs(collectibles[i].getAttribute('position').x - userPosition.x  ) < 2 && Math.abs(collectibles[i].getAttribute('position').z - userPosition.z  ) < 2)
+			{
+				console.log('The key is yours ' + collectibles[i].id);
+				
+				collectibles[i].setAttribute('material', {opacity:0});
+				userKeys.push(collectibles[i].id);
+				if (collectibles[i].id == "key-1")
+				{
+					openTheDoor("door-1");
+				}
+				
+				
+				// anoigma portas me deytero kleidi
+				if (collectibles[i].id == "key-2")
+				{
+					openTheDoor("door-3");
+				}
+				collectibles[i].remove();
+				
+			}
+		}
+		
+	}
+
+	function openTheDoor(doorID)
+	{
+	//console.log("opendoor" + doorID);
+	
+	if(doorID="door-1")
+		{
+			document.getElementById("door-1").setAttribute("animation",{property:'position', to: "3 2.5 -10", duration:'100', loop:"false", easing: 'linear'});
+		}
+		
+	if(doorID="door-3")
+		{
+			document.getElementById("door-3").setAttribute("animation",{property:'position', to: "60 2.5 -6", duration:'100', loop:"false", easing: 'linear'});  //giati anoigoun kai oi 2 portes mazi?
+		}
+	}
+	
+	//gia anoigma deuteris portas me arithmo:
+
+		//	function openDoor(doorID)
+		//	{
+		
+		//		if(doorID="door-2")
+		//			{
+		//				document.getElementById("door-2").setAttribute("animation",{property:'position', to: "28 2.5 0", duration:'100', loop:"false", easing: 'linear'});
+		//			}
+		//	}
+		
+	
+		//document.onkeydown = function(KeyPress) {
+
+		//		if (event.keyCode == 51)  
+		//		{
+		//			openDoor("door-2");
+		//		}
+       
+		//     };	
+	
+	
+	AFRAME.registerComponent('cursor-listener', {
+  
+		init: function () {
+		
+			this.el.addEventListener('click', function (evt) {
+				
+				console.log('Click on: ', evt.detail.intersection.object.el.id, ' listened by cursor');
+				if (evt.detail.intersection.object.el.id == 'w1')
+				{
+					if (document.getElementById('msg-1').style.display=='none') 
+						{
+							document.getElementById('msg-1').style.display='block'; 
+						}
+					else if (document.getElementById('msg-1').style.display=='block')
+						{
+							document.getElementById('msg-1').style.display='none'; 
+						}
+				}
+				
+				if (evt.detail.intersection.object.el.id == 'w2')
+				{
+					if (document.getElementById('msg-2').style.display=='none') 
+						{
+							document.getElementById('msg-2').style.display='block'; 
+						}
+					else if (document.getElementById('msg-2').style.display=='block')
+						{
+							document.getElementById('msg-2').style.display='none'; 
+						}
+				}
+			
+		    });
+			}
+		});
+
+	</script>
+	
+	
+</head>
+
+<body onkeydown="/*checkKeys(evt);*/"> 
+
+	
+	<div id="msg-1" style="display:none; position:absolute; left:10%; top:10%; margin:auto; z-index:1;"> 
+		<img style="width:30%" src="Writing1.png"/>
+	</div>
+	
+	<div id="msg-2" style="display:none; position:absolute; left:10%; top:10%; margin:auto; z-index:1;"> 
+		<img style="width:30%" src="Writing2.png"/>
+	</div>
+	
+
+    <a-scene light="defaultLightsEnabled: false" shadow="cast:true; receive:true; type: pcf; autoUpdate:true; enabled:true;">
+	
+	<a-entity light="type: spot; intensity: 0.30; shadowCameraVisible: false; angle: 20" position="0 8 0" rotation="-90 0 0" ></a-entity>
+	<a-entity light="type: spot; intensity: 0.30; shadowCameraVisible: false; angle: 20" position="-7 8 7" rotation="-90 0 0" ></a-entity>
+	
+	<a-entity light="type: spot; intensity: 0.20; shadowCameraVisible: false; angle: 30" position="20 8 -8" rotation="-90 0 0" ></a-entity>
+	
+	<a-entity light="type: spot; intensity: 0.20; shadowCameraVisible: false; angle: 30" position="30 8 2" rotation="-90 0 0" ></a-entity>
+	
+	<a-entity light="type: spot; intensity: 0.20; shadowCameraVisible: false; angle: 30" position="50 8 2" rotation="-90 0 0" ></a-entity>
+
+
+    <a-entity light="type: point; intensity: 0.80; distance: 25; shadowCameraVisible: false; decay: 1"
+          position="0 7 0" rotation="0 180 0"></a-entity>
+		 
+	<a-entity light="type: point; intensity: 0.90; distance: 25; shadowCameraVisible: false; decay: 1"
+          position="20 7 -8" rotation="0 -10 0"></a-entity>
+		  
+	<a-entity light="type: point; intensity: 0.40; distance: 20; shadowCameraVisible: false; decay: 1"
+          position="10 7 -15" rotation="0 90 0"></a-entity>
+		  
+	<a-entity light="type: point; intensity: 0.70; distance: 20; shadowCameraVisible: false; decay: 1"
+          position="50 7 0" rotation="0 180 0"></a-entity>
+
+	
+	<a-light type="ambient" intensity='0.2' color="#222"></a-light>
+	
+	<a-sky color="lightblue"></a-sky>
+	
+	<a-entity id="player"  test camera look-controls="pointerLockEnabled:true"  wasd-controls="acceleration:80" position="-2 3 5">
+	 <a-entity cursor-listener cursor="fuse: false; fuseTimeout: 1500; " position="0 0 -1" geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03" material="color: pink; shader: flat">
+			</a-entity>
+	</a-entity>
+	
+	<a-box id="key-1" class="keys" position="9 2 4" scale=".2 .2 .7" color="gold"></a-box>
+	<a-box id="key-2" class="keys" position="50 2 4" scale=".2 .2 .7" color="gold"></a-box>
+	
+	
+	
+		
+    <a-plane position='0 0 0' rotation='-90 0 0' height='20' width='20' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
+    </a-plane>
+	
+	<a-box height='9' width='20' depth='0.5' position='0 4.5 -10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+    </a-box>
+	
+	<a-box height='9' width='20' depth='0.5' position='-10 4.5 0' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+    </a-box>
+	
+	<a-box height='9' width='20' depth='0.5' position='10 4.5 0' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box height='9' width='20' depth='0.5' position='0 4.5 10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box id="door-1" class="doors" height='5' width='3.5' depth='1' position='6 2.5 -10' >
+    </a-box>
+	
+	
+	
+	<a-plane position='20 0 -10' rotation='-90 0 0' height='20' width='20' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
+    </a-plane>
+	<a-plane position='6.5 0 -15' rotation='-90 0 0' height='9.5' width='7' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
+    </a-plane>
+	
+	<a-box height='9' width='27' depth='0.5' position='16.5 4.5 -20' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+    </a-box>
+	
+	<a-box height='9' width='10' depth='0.5' position='3 4.5 -15' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+    </a-box>
+	
+	<a-box height='9' width='20' depth='0.5' position='30 4.5 -10' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box height='9' width='20' depth='0.5' position='20 4.5 0' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box id="door-2" class="doors" height='5' width='3.5' depth='1' position='26 2.5 0' >
+    </a-box>
+	
+	
+	
+	  <a-plane position='32 0 2.6' rotation='-90 0 0' height='5.2' width='16.3' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
+    </a-plane>
+	
+	<a-box height='9' width='16' depth='0.5' position='32 4.5 5' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+    </a-box>
+	
+	<a-box height='9' width='5' depth='0.5' position='24 4.5 2.5' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box height='9' width='10' depth='0.5' position='35 4.5 0' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	
+	
+	 <a-plane position='50 0 0' rotation='-90 0 0' height='20' width='20' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
+    </a-plane>
+	
+	<a-box height='9' width='20' depth='0.5' position='50 4.5 -10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+    </a-box>
+	
+	<a-box height='9' width='10' depth='0.5' position='40 4.5 -5' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+    </a-box>
+	
+	<a-box height='9' width='5' depth='0.5' position='40 4.5 7.5' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+    </a-box>
+	
+	<a-box height='9' width='20' depth='0.5' position='60 4.5 0' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box height='9' width='20' depth='0.5' position='50 4.5 10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box id="door-3" class="doors" height='5' width='3.5' depth='1' rotation='0 91 0' position='60 2.5 -3' >
+    </a-box>
+	
+	
+	<!--
+	<a-assets>
+	<a-asset-item id="Bookshelf" src="3dModels/Bookshelf/scene.gltf"></a-asset-item>
+	<a-asset-item id="TablewChairs" src="3dModels/TablewChairs/scene.gltf"></a-asset-item>
+	<a-asset-item id="Clock" src="3dModels/Clock/scene.gltf"></a-asset-item>
+	<a-asset-item id="Sofa" src="3dModels/Sofa/scene.gltf"></a-asset-item>
+	<a-asset-item id="Chair" src="3dModels/Chair/scene.gltf"></a-asset-item>
+	<a-asset-item id="Drawer" src="3dModels/Drawer/scene.gltf"></a-asset-item>
+	<a-asset-item id="Piano" src="3dModels/Piano/scene.gltf"></a-asset-item>
+	<a-asset-item id="Bed" src="3dModels/Bed/scene.gltf"></a-asset-item>
+	<a-asset-item id="Cabinet" src="3dModels/Cabinet/scene.gltf"></a-asset-item>
+	<a-asset-item id="FoodPlate" src="3dModels/FoodPlate/scene.gltf"></a-asset-item>
+	<a-asset-item id="Books" src="3dModels/Books/scene.gltf"></a-asset-item>
+	<a-asset-item id="Workdesk" src="3dModels/Workdesk/scene.gltf"></a-asset-item>
+	  </a-assets>
+	
+	
+	
+	 <a-entity gltf-model="#Bookshelf" position="-2 0 -8.3" rotation="0 180 0" scale ="3.5 3 5" ></a-entity>
+	 <a-entity gltf-model="#TablewChairs" position="0 0 0" rotation="0 0 0" scale ="3 1.7 2" ></a-entity>
+	 <a-entity gltf-model="#Clock" position="10.6 2 -5" rotation="0 90 0" scale ="7 7 7" ></a-entity>
+	 <a-entity gltf-model="#Sofa" position="20 0 -18" rotation="0 0 0" scale ="0.03 0.02 0.03" ></a-entity>
+	 <a-entity gltf-model="#Chair" position="-6.5 0 -7" rotation="0 130 0" scale ="0.03 0.03 0.03" ></a-entity>
+	 <a-entity gltf-model="#Drawer" position="9 1.4 5" rotation="0 180 0" scale ="0.003 0.005 0.004" ></a-entity>
+	 <a-entity gltf-model="#Piano" position="29 1 -8" rotation="0 -90 0" scale ="1.5 1.7 1.2" ></a-entity>
+	 <a-entity gltf-model="#Bed" position="-7 0 6" rotation="0 0 0" scale ="0.01 0.008 0.01" ></a-entity> 
+	 <a-entity gltf-model="#Cabinet" position="9 0 -18" rotation="0 -20 0" scale ="1.6 1.2 1.5" ></a-entity>
+	 <a-entity gltf-model="#FoodPlate" position="21 1 -13.5" rotation="0 0 0" scale ="0.01 0.01 0.01" ></a-entity>
+	 <a-entity gltf-model="#Books" position="0 1.5 0" rotation="0 0 0" scale ="1.5 1.5 1.5" ></a-entity>
+	 <a-entity gltf-model="#Workdesk" position="13.4 0 -3" rotation="0 137 0" scale ="2.5 2.4 2.4"  ></a-entity>
+	
+	-->
+	
+	 <a-box id="w1" height='0.1' width='0.6' depth='0.8' position='-1 1.3 0.7' rotation="180 0 0"  material="src:Writing1.png;" ;></a-box>
+	 <a-box id="w2" height='0.1' width='0.6' depth='0.8' position='9 2.2 -17.5' rotation="180 0 0" material="src:Writing2.png;" ;></a-box>
+	
+	
+	 <a-box height='4' width='7' depth='0.5' position='20 4.5 -19.3' material="src:Painting1.jpg;" ;></a-box> 
+	 <a-box height='3' width='2' depth='0.5' position='-10 4 2' rotation="0 90 0" material="src:Painting2.jpg;" ;></a-box>
+	 <a-box height='3' width='4' depth='0.5' position='18 4 -0.3' rotation="0 180 0" material="src:Painting3.jpg;" ;></a-box>
+	 <a-box height='4' width='4' depth='0.5' position='9.5 4 -0.5' rotation="0 -90 0" material="src:Painting4.jpg;" ;></a-box>
+	 
+	 
+	  <a-box height='3' width='2' depth='2' position='50 2 2' material="src:CrateTexture.png;" ;></a-box> 
+	  <a-box height='4' width='3' depth='3' position='52 1.3 5' material="src:CrateTexture.png;" ;></a-box>
+	  <a-box height='2' width='2' depth='2' position='48 1.3 2' material="src:CrateTexture.png;" ;></a-box>
+	
+	
+     </a-scene>
+</body>
+
+</html>
