@@ -6,6 +6,8 @@
     <title>New WebXR Scene</title>
     <script src='aframe.min.js'>
     </script>
+	<script src='reset-on-collision.js'>
+    </script>
 	
 	<script>
 	AFRAME.registerComponent("acomponent", 
@@ -45,11 +47,10 @@
 			userMoved();
 		}
 	  
-		if (event.keyCode == 51)  
+       	if (event.keyCode == 51 || event.keyCode == 49)  
 		{
 			openTheDoor("door-2");
 		}
-       
       };
    
 	
@@ -93,28 +94,30 @@
 		
 	}
 
+
+
 	function openTheDoor(doorID)
 	{
-		console.log("opendoor" + doorID);
+	console.log("opendoor" + doorID);
 	
-		if(doorID=="door-1")
+	if(doorID== "door-1")
 		{
 			document.getElementById("door-1").setAttribute("animation",{property:'position', to: "3 2.5 -10", duration:'100', loop:"false", easing: 'linear'});
 		}
 		
-		if(doorID=="door-2")
+	if(doorID== "door-2")
 		{
-			document.getElementById("door-2").setAttribute("animation",{property:'position', to: "28 2.5 0", duration:'100', loop:"false", easing: 'linear'});
+			document.getElementById("door-2").setAttribute("animation",{property:'position', to: "29 2.5 0", duration:'100', loop:"false", easing: 'linear'});
 		}
 		
-		if(doorID=="door-3")
+	if(doorID== "door-3")
 		{
 			document.getElementById("door-3").setAttribute("animation",{property:'position', to: "60 2.5 -6", duration:'100', loop:"false", easing: 'linear'});  //giati anoigoun kai oi 2 portes mazi?
 		}
 	}
-	
-	
-	
+
+		
+
 	AFRAME.registerComponent('cursor-listener', {
   
 		init: function () {
@@ -146,9 +149,22 @@
 						}
 				}
 			
+				if (evt.detail.intersection.object.el.id == 'w3')
+				{
+					if (document.getElementById('msg-3').style.display=='none') 
+						{
+							document.getElementById('msg-3').style.display='block'; 
+						}
+					else if (document.getElementById('msg-3').style.display=='block')
+						{
+							document.getElementById('msg-3').style.display='none'; 
+						}
+				}
+			
 		    });
 			}
 		});
+		
 
 	</script>
 	
@@ -159,11 +175,15 @@
 
 	
 	<div id="msg-1" style="display:none; position:absolute; left:10%; top:10%; margin:auto; z-index:1;"> 
-		<img style="width:30%" src="Writing1.png"/>
+		<img style="width:30%" src="Photos/Writing1.png"/>
 	</div>
 	
 	<div id="msg-2" style="display:none; position:absolute; left:10%; top:10%; margin:auto; z-index:1;"> 
-		<img style="width:30%" src="Writing2.png"/>
+		<img style="width:30%" src="Photos/Writing2.png"/>
+	</div>
+	
+	<div id="msg-3" style="display:none; position:absolute; left:10%; top:10%; margin:auto; z-index:1;"> 
+		<img style="width:30%" src="Photos/Writing3.png"/>
 	</div>
 	
 
@@ -196,33 +216,40 @@
 	
 	<a-sky color="lightblue"></a-sky>
 	
-	<a-entity id="player"  test camera look-controls="pointerLockEnabled:true"  wasd-controls="acceleration:80" position="-2 3 5">
+	<a-entity id="player" reset-on-collision="with: .wall" test camera look-controls="pointerLockEnabled:true"  wasd-controls="acceleration:80" position="-2 3 5">
 	 <a-entity cursor-listener cursor="fuse: false; fuseTimeout: 1500; " position="0 0 -1" geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03" material="color: pink; shader: flat">
 			</a-entity>
 	</a-entity>
 	
-	<a-box id="key-1" class="keys" position="9 2 4" scale=".2 .2 .7" color="gold"></a-box>
-	<a-box id="key-2" class="keys" position="50 2 4" scale=".2 .2 .7" color="gold"></a-box>
+	<!--
+	<a-box id="key-1" class="keys" position="9 2 4" scale=".2 .2 .7" color="silver"></a-box>
+	<a-box id="key-2" class="keys" position="58 2.5 7.5" scale=".2 .2 .7" color="silver"></a-box>
+	-->
 	
-	
-	
+
 		
     <a-plane position='0 0 0' rotation='-90 0 0' height='20' width='20' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
     </a-plane>
 	
-	<a-box height='9' width='20' depth='0.5' position='0 4.5 -10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+	<a-box class="wall" height='9' width='14.3' depth='0.5' position='-2.8 4.5 -10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='20' depth='0.5' position='-10 4.5 0' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+	<a-box class="wall" height='9' width='3' depth='0.5' position='9 4.5 -10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='20' depth='0.5' position='10 4.5 0' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+	<a-box class="wall" height='4' width='3.3' depth='0.5' position='5.9 7 -10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='20' depth='0.5' position='0 4.5 10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+	<a-box class="wall" height='9' width='20' depth='0.5' position='-10 4.5 0' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box id="door-1" class="doors" height='5' width='3.5' depth='1' position='6 2.5 -10' >
+	<a-box class="wall" height='9' width='20' depth='0.5' position='10 4.5 0' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box class="wall" height='9' width='20' depth='0.5' position='0 4.5 10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box id="door-1" class="wall" height='5' width='3.5' depth='1' position='6 2.5 -10'  material="src:Photos/DoorTexture.jpg;" >
     </a-box>
 	
 	
@@ -232,19 +259,25 @@
 	<a-plane position='6.5 0 -15' rotation='-90 0 0' height='9.5' width='7' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
     </a-plane>
 	
-	<a-box height='9' width='27' depth='0.5' position='16.5 4.5 -20' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+	<a-box class="wall" height='9' width='27' depth='0.5' position='16.5 4.5 -20' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='10' depth='0.5' position='3 4.5 -15' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+	<a-box class="wall" height='9' width='10' depth='0.5' position='3 4.5 -15' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='20' depth='0.5' position='30 4.5 -10' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+	<a-box class="wall" height='9' width='20' depth='0.5' position='30 4.5 -10' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
     </a-box>
 	
-	<a-box height='9' width='20' depth='0.5' position='20 4.5 0' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+	<a-box class="wall" height='9' width='14' depth='0.5' position='17 4.5 0' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
     </a-box>
 	
-	<a-box id="door-2" class="doors" height='5' width='3.5' depth='1' position='26 2.5 0' >
+	<a-box class="wall" height='9' width='2.5' depth='0.5' position='29 4.5 0' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box class="wall" height='4' width='3.8' depth='0.5' position='25.9 7 0' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box id="door-2" class="wall" height='5' width='3.5' depth='1' position='26 2.5 0' material="src:Photos/DoorTexture.jpg;" >
     </a-box>
 	
 	
@@ -252,13 +285,13 @@
 	  <a-plane position='32 0 2.6' rotation='-90 0 0' height='5.2' width='16.3' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
     </a-plane>
 	
-	<a-box height='9' width='16' depth='0.5' position='32 4.5 5' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+	<a-box class="wall" height='9' width='16' depth='0.5' position='32 4.5 5' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='5' depth='0.5' position='24 4.5 2.5' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+	<a-box class="wall" height='9' width='5' depth='0.5' position='24 4.5 2.5' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
     </a-box>
 	
-	<a-box height='9' width='10' depth='0.5' position='35 4.5 0' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+	<a-box class="wall"  height='9' width='10' depth='0.5' position='35 4.5 0' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
     </a-box>
 	
 	
@@ -266,26 +299,32 @@
 	 <a-plane position='50 0 0' rotation='-90 0 0' height='20' width='20' shadow="cast:true; receive:true;" src="https://images.unsplash.com/photo-1546962339-5ff89552b8ed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHdvb2QlMjBncmFpbiUyMHRleHR1cmV8ZW58MHx8MHx8&w=1000&q=80";> 
     </a-plane>
 	
-	<a-box height='9' width='20' depth='0.5' position='50 4.5 -10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+	<a-box class="wall" height='9' width='20' depth='0.5' position='50 4.5 -10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='10' depth='0.5' position='40 4.5 -5' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+	<a-box class="wall" height='9' width='10' depth='0.5' position='40 4.5 -5' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='5' depth='0.5' position='40 4.5 7.5' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
+	<a-box class="wall" height='9' width='5' depth='0.5' position='40 4.5 7.5' rotation='0 -91 0'src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946";  >
     </a-box>
 	
-	<a-box height='9' width='20' depth='0.5' position='60 4.5 0' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+	<a-box class="wall" height='9' width='11.3' depth='0.5' position='60 4.5 4.3' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
     </a-box>
 	
-	<a-box height='9' width='20' depth='0.5' position='50 4.5 10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+	<a-box class="wall" height='9' width='5.1' depth='0.5' position='60 4.5 -7.2' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
     </a-box>
 	
-	<a-box id="door-3" class="doors" height='5' width='3.5' depth='1' rotation='0 91 0' position='60 2.5 -3' >
+	<a-box class="wall" height='4.2' width='3.3' depth='0.5' position='60 6.9 -3' rotation='0 -91 0 ' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box class="wall" height='9' width='20' depth='0.5' position='50 4.5 10' src="https://cdn.shopify.com/s/files/1/0301/1277/6331/products/ZJ-HJ06633.jpg?v=1581127513&width=1946"; >
+    </a-box>
+	
+	<a-box id="door-3" class="wall" height='5' width='3.5' depth='1' rotation='0 91 0' position='60 2.5 -3' material="src:Photos/DoorTexture.jpg;" >
     </a-box>
 	
 	
-	<!--
+
 	<a-assets>
 	<a-asset-item id="Bookshelf" src="3dModels/Bookshelf/scene.gltf"></a-asset-item>
 	<a-asset-item id="TablewChairs" src="3dModels/TablewChairs/scene.gltf"></a-asset-item>
@@ -299,13 +338,22 @@
 	<a-asset-item id="FoodPlate" src="3dModels/FoodPlate/scene.gltf"></a-asset-item>
 	<a-asset-item id="Books" src="3dModels/Books/scene.gltf"></a-asset-item>
 	<a-asset-item id="Workdesk" src="3dModels/Workdesk/scene.gltf"></a-asset-item>
-	  </a-assets>
-	
+	<a-asset-item id="SantaMaria" src="3dModels/SantaMaria/scene.gltf"></a-asset-item>
+	<a-asset-item id="Radio" src="3dModels/Radio/scene.gltf"></a-asset-item>
+	<a-asset-item id="Lamp" src="3dModels/Lamp/scene.gltf"></a-asset-item>
+	<a-asset-item id="Typewriter" src="3dModels/Typewriter/scene.gltf"></a-asset-item>
+	<a-asset-item id="Shelves" src="3dModels/Shelves/scene.gltf"></a-asset-item>
+	<a-asset-item id="Cloth" src="3dModels/Cloth/scene.gltf"></a-asset-item>
+	<a-asset-item id="Flower" src="3dModels/Flower/scene.gltf"></a-asset-item>
+	<a-asset-item id="Scattered" src="3dModels/Scattered/scene.gltf"></a-asset-item>
+	<a-asset-item id="SilverKey" src="3dModels/SilverKey/scene.gltf"></a-asset-item>
+	</a-assets>
+	  
 	
 	
 	 <a-entity gltf-model="#Bookshelf" position="-2 0 -8.3" rotation="0 180 0" scale ="3.5 3 5" ></a-entity>
 	 <a-entity gltf-model="#TablewChairs" position="0 0 0" rotation="0 0 0" scale ="3 1.7 2" ></a-entity>
-	 <a-entity gltf-model="#Clock" position="10.6 2 -5" rotation="0 90 0" scale ="7 7 7" ></a-entity>
+	 <a-entity gltf-model="#Clock" position="11 2 -5.7" rotation="0 90 0" scale ="7 7 7" ></a-entity>
 	 <a-entity gltf-model="#Sofa" position="20 0 -18" rotation="0 0 0" scale ="0.03 0.02 0.03" ></a-entity>
 	 <a-entity gltf-model="#Chair" position="-6.5 0 -7" rotation="0 130 0" scale ="0.03 0.03 0.03" ></a-entity>
 	 <a-entity gltf-model="#Drawer" position="9 1.4 5" rotation="0 180 0" scale ="0.003 0.005 0.004" ></a-entity>
@@ -315,26 +363,43 @@
 	 <a-entity gltf-model="#FoodPlate" position="21 1 -13.5" rotation="0 0 0" scale ="0.01 0.01 0.01" ></a-entity>
 	 <a-entity gltf-model="#Books" position="0 1.5 0" rotation="0 0 0" scale ="1.5 1.5 1.5" ></a-entity>
 	 <a-entity gltf-model="#Workdesk" position="13.4 0 -3" rotation="0 137 0" scale ="2.5 2.4 2.4"  ></a-entity>
-	
-	-->
-	
-	 <a-box id="w1" height='0.1' width='0.6' depth='0.8' position='-1 1.3 0.7' rotation="180 0 0"  material="src:Writing1.png;" ;></a-box>
-	 <a-box id="w2" height='0.1' width='0.6' depth='0.8' position='9 2.2 -17.5' rotation="180 0 0" material="src:Writing2.png;" ;></a-box>
-	
-	
-	 <a-box height='4' width='7' depth='0.5' position='20 4.5 -19.3' material="src:Painting1.jpg;" ;></a-box> 
-	 <a-box height='3' width='2' depth='0.5' position='-10 4 2' rotation="0 90 0" material="src:Painting2.jpg;" ;></a-box>
-	 <a-box height='3' width='4' depth='0.5' position='18 4 -0.3' rotation="0 180 0" material="src:Painting3.jpg;" ;></a-box>
-	 <a-box height='4' width='4' depth='0.5' position='9.5 4 -0.5' rotation="0 -90 0" material="src:Painting4.jpg;" ;></a-box>
+	 <a-entity id="key-1" class="keys" gltf-model="#SilverKey" position="9 2 4" rotation="0 0 0" scale ="0.07 0.07 0.07"  ></a-entity>
+	 <a-entity id="key-2" class="keys" gltf-model="#SantaMaria" position="57.5 2.4 7.5" rotation="0 -90 0" scale ="0.1 0.1 0.1"  ></a-entity>
+	 <a-entity gltf-model="#Radio" position="9 2 5" rotation="0 -180 0" scale ="5 5 5"  ></a-entity>
+	 <a-entity gltf-model="#Lamp" position="12.7 2.2 -4" rotation="0 100 0" scale ="4 4 4"  ></a-entity>
+	 <a-entity gltf-model="#Typewriter" position="13.7 2.2 -2.5" rotation="0 -40 0" scale ="2 2 2"  ></a-entity>
+	 <a-entity gltf-model="#Shelves" position="58 0 7.5" rotation="0 0 0" scale ="1 1 1"  ></a-entity>
+	 <a-entity gltf-model="#Cloth" position="43 0 -6.5" rotation="0 0 0" scale ="0.4 0.4 0.4"  ></a-entity>
+	 <a-entity gltf-model="#Flower" position="48 2 -8" rotation="0 0 0" scale ="5.7 5.7 5.7"  ></a-entity>
+	 <a-entity gltf-model="#Scattered" position="46 0 6.5" rotation="0 50 0" scale ="2.7 2.7 2.7"  ></a-entity>
 	 
 	 
-	  <a-box height='3' width='2' depth='2' position='50 2 2' material="src:CrateTexture.png;" ;></a-box> 
-	  <a-box height='4' width='3' depth='3' position='52 1.3 5' material="src:CrateTexture.png;" ;></a-box>
-	  <a-box height='2' width='2' depth='2' position='48 1.3 2' material="src:CrateTexture.png;" ;></a-box>
 	
+	
+	
+	 <a-box id="w1" height='0.1' width='0.6' depth='0.8' position='-1 1.3 0.7' rotation="180 0 0"  material="src:Photos/Writing1.png;" ;></a-box>
+	 <a-box id="w2" height='0.1' width='0.6' depth='0.8' position='9 2.2 -17.5' rotation="180 0 0" material="src:Photos/Writing2.png;" ;></a-box>
+	 <a-box id="w3" height='0.1' width='0.6' depth='0.8' position='41.6 2.3 -1.1' rotation="180 0 0" material="src:Photos/Writing3.png;" ;></a-box>
+	
+	
+	 <a-box height='4' width='7' depth='0.5' position='20 4.5 -19.3' material="src:Photos/Painting1.jpg;" ;></a-box> 
+	 <a-box height='3' width='2' depth='0.5' position='-10 4 2' rotation="0 90 0" material="src:Photos/Painting2.jpg;" ;></a-box>
+	 <a-box height='3' width='4' depth='0.5' position='18 4 -0.3' rotation="0 180 0" material="src:Photos/Painting3.jpg;" ;></a-box>
+	 <a-box height='4' width='4' depth='0.5' position='9.5 4 -0.5' rotation="0 -90 0" material="src:Photos/Painting4.jpg;" ;></a-box>
+	 
+	 
+	  <a-box id="box-1" height='3' width='2' depth='2' position='58 1.8 -8' material="src:Photos/CrateTexture.png;" ;></a-box> 
+	  <a-box id="box-2" height='4' width='3' depth='3' position='51 1.3 5' material="src:Photos/CrateTexture.png;" ;></a-box>
+	  <a-box id="box-3" height='2' width='2' depth='2' position='41.6 1.3 -1' material="src:Photos/CrateTexture.png;" ;></a-box>
+	  <a-box id="box-4" height='2' width='4' depth='2' position='55 1.3 -8' material="src:Photos/CrateTexture.png;" ;></a-box>
+	  <a-box id="box-5" height='4' width='3' depth='3' position='58 2 3' material="src:Photos/CrateTexture.png;" ;></a-box>
+	  <a-box id="box-6" height='2' width='2' depth='2' position='51 1.1 2.4' material="src:Photos/CrateTexture.png;" ;></a-box>
+	  <a-box id="box-7" height='3' width='1.7' depth='1.7' position='58 1 0.5' material="src:Photos/CrateTexture.png;" ;></a-box>
+	  <a-box id="box-8" height='1.5' width='1.5' depth='1.5' position='51 4.1 5' material="src:Photos/CrateTexture.png;" ;></a-box>
+	  <a-box id="box-9" height='3.7' width='3' depth='3' position='51 1.3 8' material="src:Photos/CrateTexture.png;" ;></a-box>
+	  <a-box id="box-10" height='1.5' width='1.5' depth='1.5' position='53.3 0.8 8.3' material="src:Photos/CrateTexture.png;" ;></a-box>
 	
      </a-scene>
 </body>
-
 
 </html>
